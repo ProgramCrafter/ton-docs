@@ -38,7 +38,13 @@ A machine-readable list of TVM instructions is available [here](https://github.c
 Here `0 <= i,j,k <= 15` if not stated otherwise.
 
 ### 2.1 Basic stack manipulation primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+
+<font size="2"><div class="tables-small-code">
+<style>{`
+.tables-small-code code {font-size: 13px !important;}
+`}</style>
+
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`00`** | `NOP` | _`-`_ | Does nothing. | `18` |
 | **`01`** | `SWAP` | _`x y - y x`_ | Same as [`s1 XCHG0`](#instr-xchg-0i). | `18` |
@@ -53,7 +59,7 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 | **`30`** | `DROP` | _`x -`_ | Same as [`s0 POP`](#instr-pop), discards the top-of-stack value. | `18` |
 | **`31`** | `NIP` | _`x y - y`_ | Same as [`s1 POP`](#instr-pop). | `18` |
 ### 2.2 Complex stack manipulation primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`4ijk`** | `s[i] s[j] s[k] XCHG3` |  | Equivalent to [`s2 s[i] XCHG`](#instr-xchg-ij) [`s1 s[j] XCHG`](#instr-xchg-ij) [`s[k] XCHG0`](#instr-xchg-0i). | `26` |
 | **`50ij`** | `s[i] s[j] XCHG2` |  | Equivalent to [`s1 s[i] XCHG`](#instr-xchg-ij) [`s[j] XCHG0`](#instr-xchg-0i). | `26` |
@@ -98,7 +104,7 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 | **`6Cij`** | `[i] [j] BLKDROP2` |  | Drops `i` stack elements under the top `j` elements.<br/>`1 <= i <= 15`, `0 <= j <= 15`<br/>Equivalent to [`[i+j] 0 REVERSE`](#instr-reverse) [`[i] BLKDROP`](#instr-blkdrop) [`[j] 0 REVERSE`](#instr-reverse). | `26` |
 
 ## 3 Tuple, List, and Null primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`6D`** | `NULL`<br/>`PUSHNULL` | _` - null`_ | Pushes the only value of type _Null_. | `18` |
 | **`6E`** | `ISNULL` | _`x - ?`_ | Checks whether `x` is a _Null_, and returns `-1` or `0` accordingly. | `18` |
@@ -161,7 +167,7 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 
 ## 4 Constant or literal primitives
 ### 4.1 Integer and boolean constants
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`7i`** | `[x] PUSHINT`<br/>`[x] INT` | _`- x`_ | Pushes integer `x` into the stack. `-5 <= x <= 10`.<br/>Here `i` equals four lower-order bits of `x` (`i=x mod 16`). | `18` |
 | **`70`** | `ZERO`<br/>`FALSE` | _`- 0`_ |  | `18` |
@@ -177,7 +183,7 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 | **`84xx`** | `[xx+1] PUSHPOW2DEC` | _`- 2^(xx+1)-1`_ | Pushes `2^(xx+1)-1` for `0 <= xx <= 255`. | `26` |
 | **`85xx`** | `[xx+1] PUSHNEGPOW2` | _`- -2^(xx+1)`_ | Pushes `-2^(xx+1)` for `0 <= xx <= 255`. | `26` |
 ### 4.2 Constant slices, continuations, cells, and references
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`88`** | `[ref] PUSHREF` | _`- c`_ | Pushes the reference `ref` into the stack.<br/>_Details:_ Pushes the first reference of `cc.code` into the stack as a _Cell_ (and removes this reference from the current continuation). | `18` |
 | **`89`** | `[ref] PUSHREFSLICE` | _`- s`_ | Similar to [`PUSHREF`](#instr-pushref), but converts the cell into a _Slice_. | `118/43` |
@@ -193,7 +199,7 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 
 ## 5 Arithmetic primitives
 ### 5.1 Addition, subtraction, multiplication
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`A0`** | `ADD` | _`x y - x+y`_ |  | `18` |
 | **`A1`** | `SUB` | _`x y - x-y`_ |  | `18` |
@@ -205,7 +211,7 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 | **`A7cc`** | `[cc] MULCONST`<br/>`[cc] MULINT` | _`x - x*cc`_ | `-128 <= cc <= 127`. | `26` |
 | **`A8`** | `MUL` | _`x y - x*y`_ |  | `18` |
 ### 5.2 Division
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`A9mscdf`** |  |  | This is the general encoding of division, with an optional pre-multiplication and an optional replacement of the division or multiplication by a shift. Variable fields are as follows:<br/>`0 <= m <= 1`  -  Indicates whether there is pre-multiplication ([`MULDIV`](#instr-muldiv) and its variants), possibly replaced by a left shift.<br/>`0 <= s <= 2`  -  Indicates whether either the multiplication or the division have been replaced by shifts: `s=0` - no replacement, `s=1` - division replaced by a right shift, `s=2` - multiplication replaced by a left shift (possible only for `m=1`).<br/>`0 <= c <= 1`  -  Indicates whether there is a constant one-byte argument `tt` for the shift operator (if `s!=0`). For `s=0`, `c=0`. If `c=1`, then `0 <= tt <= 255`, and the shift is performed by `tt+1` bits. If `s!=0` and `c=0`, then the shift amount is provided to the instruction as a top-of-stack _Integer_ in range `0...256`.<br/>`1 <= d <= 3`  -  Indicates which results of division are required: `1` - only the quotient, `2` - only the remainder, `3` - both.<br/>`0 <= f <= 2`  -  Rounding mode: `0` - floor, `1` - nearest integer, `2` - ceiling.<br/>All instructions below are variants of this. | `26` |
 | **`A904`** | `DIV` | _`x y - q`_ | `q=floor(x/y)`, `r=x-y*q` | `26` |
@@ -236,7 +242,7 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 | **`A9D5tt`** | `[tt+1] LSHIFT#DIVR` | _`x y - round(2^(tt+1)*x/y)`_ |  | `34` |
 | **`A9D6tt`** | `[tt+1] LSHIFT#DIVC` | _`x y - ceil(2^(tt+1)*x/y)`_ |  | `26` |
 ### 5.3 Shifts, logical operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`AAcc`** | `[cc+1] LSHIFT#` | _`x - x*2^(cc+1)`_ | `0 <= cc <= 255` | `26` |
 | **`ABcc`** | `[cc+1] RSHIFT#` | _`x - floor(x/2^(cc+1))`_ | `0 <= cc <= 255` | `18` |
@@ -264,7 +270,7 @@ Quiet operations return `NaN` instead of throwing exceptions if one of their arg
 Quiet operations have a prefix `Q` as shown below. Another way to make an operation quiet is to add `QUIET` before it (i.e. one can write [`QUIET ADD`](#instr-add) instead of [`QADD`](#instr-qadd)).
 Quiet versions of integer comparison primitives are also available ([`QUIET SGN`](#instr-sgn), [`QUIET LESS`](#instr-less) etc).
 
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`B7A0`** | `QADD` | _`x y - x+y`_ |  | `26` |
 | **`B7A1`** | `QSUB` | _`x y - x-y`_ |  | `26` |
@@ -296,7 +302,7 @@ Quiet versions of integer comparison primitives are also available ([`QUIET SGN`
 
 ## 6 Comparison primitives
 ### 6.1 Integer comparison
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`B8`** | `SGN` | _`x - sgn(x)`_ | Computes the sign of an integer `x`:<br/>`-1` if `x<0`, `0` if `x=0`, `1` if `x>0`. | `18` |
 | **`B9`** | `LESS` | _`x y - x<y`_ | Returns `-1` if `x<y`, `0` otherwise. | `18` |
@@ -320,7 +326,7 @@ Quiet versions of integer comparison primitives are also available ([`QUIET SGN`
 ### 6.2 Other comparison
 Most of these "other comparison" primitives actually compare the data portions of _Slices_ as bitstrings (ignoring references if not stated otherwise).
 
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`C700`** | `SEMPTY` | _`s - ?`_ | Checks whether a _Slice_ `s` is empty (i.e., contains no bits of data and no cell references). | `26` |
 | **`C701`** | `SDEMPTY` | _`s - ?`_ | Checks whether _Slice_ `s` has no bits of data. | `26` |
@@ -343,7 +349,7 @@ Most of these "other comparison" primitives actually compare the data portions o
 
 ## 7 Cell primitives
 ### 7.1 Cell serialization primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`C8`** | `NEWC` | _`- b`_ | Creates a new empty _Builder_. | `18` |
 | **`C9`** | `ENDC` | _`b - c`_ | Converts a _Builder_ into an ordinary _Cell_. | `518` |
@@ -413,7 +419,7 @@ Most of these "other comparison" primitives actually compare the data portions o
 | **`CF81`** | `STZERO` | _`b - b'`_ | Stores one binary zero. | `24` |
 | **`CF83`** | `STONE` | _`b - b'`_ | Stores one binary one. | `24` |
 ### 7.2 Cell deserialization primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`D0`** | `CTOS` | _`c - s`_ | Converts a _Cell_ into a _Slice_. Notice that `c` must be either an ordinary cell, or an exotic cell which is automatically _loaded_ to yield an ordinary cell `c'`, converted into a _Slice_ afterwards. | `118/43` |
 | **`D1`** | `ENDS` | _`s - `_ | Removes a _Slice_ `s` from the stack, and throws an exception if it is not empty. | `18/68` |
@@ -502,7 +508,7 @@ Most of these "other comparison" primitives actually compare the data portions o
 
 ## 8 Continuation and control flow primitives
 ### 8.1 Unconditional control flow primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`D8`** | `EXECUTE`<br/>`CALLX` | _`c - `_ | _Calls_, or _executes_, continuation `c`. | `18` |
 | **`D9`** | `JMPX` | _`c - `_ | _Jumps_, or transfers control, to continuation `c`.<br/>The remainder of the previous current continuation `cc` is discarded. | `18` |
@@ -525,7 +531,7 @@ Most of these "other comparison" primitives actually compare the data portions o
 | **`DB3E`** | `[ref] JMPREFDATA` |  | Equivalent to [`PUSHREFCONT`](#instr-pushrefcont) [`JMPXDATA`](#instr-jmpxdata). | `126/51` |
 | **`DB3F`** | `RETDATA` |  | Equivalent to [`c0 PUSHCTR`](#instr-pushctr) [`JMPXDATA`](#instr-jmpxdata). In this way, the remainder of the current continuation is converted into a _Slice_ and returned to the caller. | `26` |
 ### 8.2 Conditional control flow primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`DC`** | `IFRET`<br/>`IFNOT:` | _`f - `_ | Performs a [`RET`](#instr-ret), but only if integer `f` is non-zero. If `f` is a `NaN`, throws an integer overflow exception. | `18` |
 | **`DD`** | `IFNOTRET`<br/>`IF:` | _`f - `_ | Performs a [`RET`](#instr-ret), but only if integer `f` is zero. | `18` |
@@ -555,7 +561,7 @@ Most of these "other comparison" primitives actually compare the data portions o
 | **`E3D_n`** | `[ref] [n] IFBITJMPREF` | _`x - x`_ | Performs a [`JMPREF`](#instr-jmpref) if bit `0 <= n <= 31` is set in integer `x`. | `126/51` |
 | **`E3F_n`** | `[ref] [n] IFNBITJMPREF` | _`x - x`_ | Performs a [`JMPREF`](#instr-jmpref) if bit `0 <= n <= 31` is not set in integer `x`. | `126/51` |
 ### 8.3 Control flow primitives: loops
-| xxxxxxx<br />Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxxx<br />Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`E4`** | `REPEAT` | _`n c - `_ | Executes continuation `c` `n` times, if integer `n` is non-negative. If `n>=2^31` or `n<-2^31`, generates a range check exception.<br/>Notice that a [`RET`](#instr-ret) inside the code of `c` works as a `continue`, not as a `break`. One should use either alternative (experimental) loops or alternative [`RETALT`](#instr-retalt) (along with a [`SETEXITALT`](#instr-setexitalt) before the loop) to `break` out of a loop. | `18` |
 | **`E4`** | `REPEAT:<{ code }>`<br/>`<{ code }>REPEAT` | _`n -`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`REPEAT`](#instr-repeat). |  |
@@ -584,7 +590,7 @@ Most of these "other comparison" primitives actually compare the data portions o
 ### 8.4 Manipulating the stack of continuations
 Here `s"` is the [fee for moving stack elements between continuations](#11-gas-prices). It is equal to the size of the resulting stack minus 32 (or 0 if the stack is smaller than 32).
 
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`ECrn`** | `[r] [n] SETCONTARGS` | _`x_1 x_2...x_r c - c'`_ | Similar to [`[r] -1 SETCONTARGS`](#instr-setcontargs-n), but sets `c.nargs` to the final size of the stack of `c'` plus `n`. In other words, transforms `c` into a _closure_ or a _partially applied function_, with `0 <= n <= 14` arguments missing. | `26+s”` |
 | **`EC0n`** | `[n] SETNUMARGS` | _`c - c'`_ | Sets `c.nargs` to `n` plus the current depth of `c`'s stack, where `0 <= n <= 14`. If `c.nargs` is already set to a non-negative value, does nothing. | `26` |
@@ -594,14 +600,14 @@ Here `s"` is the [fee for moving stack elements between continuations](#11-gas-p
 | **`ED11`** | `SETCONTVARARGS` | _`x_1 x_2...x_r c r n - c'`_ | Similar to [`SETCONTARGS`](#instr-setcontargs-n), but with `0 <= r <= 255` and `-1 <= n <= 255` taken from the stack. | `26+s”` |
 | **`ED12`** | `SETNUMVARARGS` | _`c n - c'`_ | `-1 <= n <= 255`<br/>If `n=-1`, this operation does nothing (`c'=c`).<br/>Otherwise its action is similar to [`[n] SETNUMARGS`](#instr-setnumargs), but with `n` taken from the stack. | `26` |
 ### 8.5 Creating simple continuations and closures
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`ED1E`** | `BLESS` | _`s - c`_ | Transforms a _Slice_ `s` into a simple ordinary continuation `c`, with `c.code=s` and an empty stack and savelist. | `26` |
 | **`ED1F`** | `BLESSVARARGS` | _`x_1...x_r s r n - c`_ | Equivalent to [`ROT`](#instr-rot) [`BLESS`](#instr-bless) [`ROTREV`](#instr-rotrev) [`SETCONTVARARGS`](#instr-setcontvarargs). | `26+s”` |
 | **`EErn`** | `[r] [n] BLESSARGS` | _`x_1...x_r s - c`_ | `0 <= r <= 15`, `-1 <= n <= 14`<br/>Equivalent to [`BLESS`](#instr-bless) [`[r] [n] SETCONTARGS`](#instr-setcontargs-n).<br/>The value of `n` is represented inside the instruction by the 4-bit integer `n mod 16`. | `26` |
 | **`EE0n`** | `[n] BLESSNUMARGS` | _`s - c`_ | Also transforms a _Slice_ `s` into a _Continuation_ `c`, but sets `c.nargs` to `0 <= n <= 14`. | `26` |
 ### 8.6 Operations with continuation savelists and control registers
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`ED4i`** | `c[i] PUSHCTR`<br/>`c[i] PUSH` | _`- x`_ | Pushes the current value of control register `c(i)`. If the control register is not supported in the current codepage, or if it does not have a value, an exception is triggered. | `26` |
 | **`ED44`** | `c4 PUSHCTR`<br/>`c4 PUSH` | _`- x`_ | Pushes the “global data root'' cell reference, thus enabling access to persistent smart-contract data. | `26` |
@@ -632,7 +638,7 @@ Here `s"` is the [fee for moving stack elements between continuations](#11-gas-p
 | **`EDFA`** | `SAMEALT` | _`-`_ | Sets `c1` to `c0`. Equivalent to [`c0 PUSHCTR`](#instr-pushctr) [`c1 POPCTR`](#instr-popctr). | `26` |
 | **`EDFB`** | `SAMEALTSAVE` | _`-`_ | Sets `c1` to `c0`, but first saves the old value of `c1` into the savelist of `c0`.<br/>Equivalent to [`c1 SAVE`](#instr-save) [`SAMEALT`](#instr-samealt). | `26` |
 ### 8.7 Dictionary subroutine calls and jumps
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F0nn`** | `[nn] CALL`<br/>`[nn] CALLDICT` | _`- nn`_ | Calls the continuation in `c3`, pushing integer `0 <= nn <= 255` into its stack as an argument.<br/>Approximately equivalent to [`[nn] PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr) [`EXECUTE`](#instr-execute). |  |
 | **`F12_n`** | `[n] CALL`<br/>`[n] CALLDICT` | _`- n`_ | For `0 <= n < 2^14`, an encoding of [`[n] CALL`](#instr-calldict) for larger values of `n`. |  |
@@ -640,7 +646,7 @@ Here `s"` is the [fee for moving stack elements between continuations](#11-gas-p
 | **`F1A_n`** | `[n] PREPARE`<br/>`[n] PREPAREDICT` | _` - n c`_ | Equivalent to [`n PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr), for `0 <= n < 2^14`.<br/>In this way, [`[n] CALL`](#instr-calldict) is approximately equivalent to [`[n] PREPARE`](#instr-preparedict) [`EXECUTE`](#instr-execute), and [`[n] JMP`](#instr-jmpdict) is approximately equivalent to [`[n] PREPARE`](#instr-preparedict) [`JMPX`](#instr-jmpx).<br/>One might use, for instance, [`CALLXARGS`](#instr-callxargs) or [`CALLCC`](#instr-callcc) instead of [`EXECUTE`](#instr-execute) here. |  |
 
 ## 9 Exception generating and handling primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F22_n`** | `[n] THROW` | _` - 0 n`_ | Throws exception `0 <= n <= 63` with parameter zero.<br/>In other words, it transfers control to the continuation in `c2`, pushing `0` and `n` into its stack, and discarding the old stack altogether. | `76` |
 | **`F26_n`** | `[n] THROWIF` | _`f - `_ | Throws exception `0 <= n <= 63` with  parameter zero only if integer `f!=0`. | `26/76` |
@@ -664,12 +670,12 @@ Here `s"` is the [fee for moving stack elements between continuations](#11-gas-p
 ## 10 Dictionary manipulation primitives
 The gas consumption of most dictionary operations is not fixed, it depends on the contents of the given dictionary.
 ### 10.1 Dictionary creation
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`6D`** | `NEWDICT` | _` - D`_ | Returns a new empty dictionary.<br/>It is an alternative mnemonics for [`PUSHNULL`](#instr-null). | `18` |
 | **`6E`** | `DICTEMPTY` | _`D - ?`_ | Checks whether dictionary `D` is empty, and returns `-1` or `0` accordingly.<br/>It is an alternative mnemonics for [`ISNULL`](#instr-isnull). | `18` |
 ### 10.2 Dictionary serialization and deserialization
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`CE`** | `STDICTS`<br/>`` | _`s b - b'`_ | Stores a _Slice_-represented dictionary `s` into _Builder_ `b`.<br/>It is actually a synonym for [`STSLICE`](#instr-stslice). | `18` |
 | **`F400`** | `STDICT`<br/>`STOPTREF` | _`D b - b'`_ | Stores dictionary `D` into _Builder_ `b`, returing the resulting _Builder_ `b'`.<br/>In other words, if `D` is a cell, performs [`STONE`](#instr-stone) and [`STREF`](#instr-stref); if `D` is _Null_, performs [`NIP`](#instr-nip) and [`STZERO`](#instr-stzero); otherwise throws a type checking exception. | `26` |
@@ -681,7 +687,7 @@ The gas consumption of most dictionary operations is not fixed, it depends on th
 | **`F406`** | `LDDICTQ` | _`s - D s' -1 or s 0`_ | A quiet version of [`LDDICT`](#instr-lddict). | `26` |
 | **`F407`** | `PLDDICTQ` | _`s - D -1 or 0`_ | A quiet version of [`PLDDICT`](#instr-plddict). | `26` |
 ### 10.3 Get dictionary operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F40A`** | `DICTGET` | _`k D n - x -1 or 0`_ | Looks up key `k` (represented by a _Slice_, the first `0 <= n <= 1023` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys.<br/>On success, returns the value found as a _Slice_ `x`. |  |
 | **`F40B`** | `DICTGETREF` | _`k D n - c -1 or 0`_ | Similar to [`DICTGET`](#instr-dictget), but with a [`LDREF`](#instr-ldref) [`ENDS`](#instr-ends) applied to `x` on success.<br/>This operation is useful for dictionaries of type `HashmapE(n,^Y)`. |  |
@@ -690,7 +696,7 @@ The gas consumption of most dictionary operations is not fixed, it depends on th
 | **`F40E`** | `DICTUGET` | _`i D n - x -1 or 0`_ | Similar to [`DICTIGET`](#instr-dictiget), but with _unsigned_ (big-endian) `n`-bit _Integer_ `i` used as a key. |  |
 | **`F40F`** | `DICTUGETREF` | _`i D n - c -1 or 0`_ | Similar to [`DICTIGETREF`](#instr-dictigetref), but with an unsigned `n`-bit _Integer_ key `i`. |  |
 ### 10.4 Set/Replace/Add dictionary operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F412`** | `DICTSET` | _`x k D n - D'`_ | Sets the value associated with `n`-bit key `k` (represented by a _Slice_ as in [`DICTGET`](#instr-dictget)) in dictionary `D` (also represented by a _Slice_) to value `x` (again a _Slice_), and returns the resulting dictionary as `D'`. |  |
 | **`F413`** | `DICTSETREF` | _`c k D n - D'`_ | Similar to [`DICTSET`](#instr-dictset), but with the value set to a reference to _Cell_ `c`. |  |
@@ -731,7 +737,7 @@ The gas consumption of most dictionary operations is not fixed, it depends on th
 ### 10.5 Builder-accepting variants of Set dictionary operations
 The following primitives accept the new value as a _Builder_ `b` instead of a _Slice_ `x`.
 
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F441`** | `DICTSETB` | _`b k D n - D'`_ |  |  |
 | **`F442`** | `DICTISETB` | _`b i D n - D'`_ |  |  |
@@ -752,7 +758,7 @@ The following primitives accept the new value as a _Builder_ `b` instead of a _S
 | **`F456`** | `DICTIADDGETB` | _`b i D n - D' -1 or D y 0`_ |  |  |
 | **`F457`** | `DICTUADDGETB` | _`b i D n - D' -1 or D y 0`_ |  |  |
 ### 10.6 Delete dictionary operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F459`** | `DICTDEL` | _`k D n - D' -1 or D 0`_ | Deletes `n`-bit key, represented by a _Slice_ `k`, from dictionary `D`. If the key is present, returns the modified dictionary `D'` and the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`. |  |
 | **`F45A`** | `DICTIDEL` | _`i D n - D' ?`_ | A version of [`DICTDEL`](#instr-dictdel) with the key represented by a signed `n`-bit _Integer_ `i`. If `i` does not fit into `n` bits, simply returns `D` `0` (“key not found, dictionary unmodified''). |  |
@@ -766,7 +772,7 @@ The following primitives accept the new value as a _Builder_ `b` instead of a _S
 ### 10.7 "Maybe reference" dictionary operations
 The following operations assume that a dictionary is used to store values `c?` of type _Maybe Cell_.  The representation is as follows: if `c?` is a _Cell_ , it is stored as a value with no data bits and exactly one reference to this _Cell_.  If `c?` is _Null_, then the corresponding key must be absent from the dictionary.
 
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F469`** | `DICTGETOPTREF` | _`k D n - c^?`_ | A variant of [`DICTGETREF`](#instr-dictgetref) that returns _Null_ instead of the value `c^?` if the key `k` is absent from dictionary `D`. |  |
 | **`F46A`** | `DICTIGETOPTREF` | _`i D n - c^?`_ | [`DICTGETOPTREF`](#instr-dictgetoptref), but with `i` a signed `n`-bit integer. If the key `i` is out of range, also returns _Null_. |  |
@@ -778,14 +784,14 @@ The following operations assume that a dictionary is used to store values `c?` o
 These are some basic operations for constructing prefix code dictionaries.
 These primitives are completely similar to their non-prefix code counterparts ([`DICTSET`](#instr-dictset) etc), with the obvious difference that even a _Set_ may fail in a prefix code dictionary, so a success flag must be returned by [`PFXDICTSET`](#instr-pfxdictset) as well.
 
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F470`** | `PFXDICTSET` | _`x k D n - D' -1 or D 0`_ |  |  |
 | **`F471`** | `PFXDICTREPLACE` | _`x k D n - D' -1 or D 0`_ |  |  |
 | **`F472`** | `PFXDICTADD` | _`x k D n - D' -1 or D 0`_ |  |  |
 | **`F473`** | `PFXDICTDEL` | _`k D n - D' -1 or D 0`_ |  |  |
 ### 10.9 Variants of GetNext and GetPrev operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F474`** | `DICTGETNEXT` | _`k D n - x' k' -1 or 0`_ | Computes the minimal key `k'` in dictionary `D` that is lexicographically greater than `k`, and returns `k'` (represented by a _Slice_) along with associated value `x'` (also represented by a _Slice_). |  |
 | **`F475`** | `DICTGETNEXTEQ` | _`k D n - x' k' -1 or 0`_ | Similar to [`DICTGETNEXT`](#instr-dictgetnext), but computes the minimal key `k'` that is lexicographically greater than or equal to `k`. |  |
@@ -800,7 +806,7 @@ These primitives are completely similar to their non-prefix code counterparts ([
 | **`F47E`** | `DICTUGETPREV` | _`i D n - x' i' -1 or 0`_ | Similar to [`DICTGETPREV`](#instr-dictgetprev), but interprets keys as unsigned `n`-bit integers. |  |
 | **`F47F`** | `DICTUGETPREVEQ` | _`i D n - x' i' -1 or 0`_ | Similar to [`DICTGETPREVEQ`](#instr-dictgetpreveq), but interprets keys a unsigned `n`-bit integers. |  |
 ### 10.10 GetMin, GetMax, RemoveMin, RemoveMax operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F482`** | `DICTMIN` | _`D n - x k -1 or 0`_ | Computes the minimal key `k` (represented by a _Slice_ with `n` data bits) in dictionary `D`, and returns `k` along with the associated value `x`. |  |
 | **`F483`** | `DICTMINREF` | _`D n - c k -1 or 0`_ | Similar to [`DICTMIN`](#instr-dictmin), but returns the only reference in the value as a _Cell_ `c`. |  |
@@ -827,7 +833,7 @@ These primitives are completely similar to their non-prefix code counterparts ([
 | **`F49E`** | `DICTUREMMAX` | _`D n - D' x i -1 or D 0`_ | Similar to [`DICTREMMAX`](#instr-dictremmax), but returns the key as an unsigned `n`-bit _Integer_ `i`. |  |
 | **`F49F`** | `DICTUREMMAXREF` | _`D n - D' c i -1 or D 0`_ | Similar to [`DICTUREMMAX`](#instr-dicturemmax), but returns the only reference in the value. |  |
 ### 10.11 Special Get dictionary and prefix code dictionary operations and constant dictionaries
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F4A0`** | `DICTIGETJMP` | _`i D n - `_ | Similar to [`DICTIGET`](#instr-dictiget), but with `x` [`BLESS`](#instr-bless)ed into a continuation with a subsequent [`JMPX`](#instr-jmpx) to it on success. On failure, does nothing. This is useful for implementing `switch`/`case` constructions. |  |
 | **`F4A1`** | `DICTUGETJMP` | _`i D n - `_ | Similar to [`DICTIGETJMP`](#instr-dictigetjmp), but performs [`DICTUGET`](#instr-dictuget) instead of [`DICTIGET`](#instr-dictiget). |  |
@@ -844,7 +850,7 @@ These primitives are completely similar to their non-prefix code counterparts ([
 | **`F4BE`** | `DICTIGETEXECZ` | _`i D n - i or nothing`_ | A variant of [`DICTIGETEXEC`](#instr-dictigetexec) that returns index `i` on failure. |  |
 | **`F4BF`** | `DICTUGETEXECZ` | _`i D n - i or nothing`_ | A variant of [`DICTUGETEXEC`](#instr-dictugetexec) that returns index `i` on failure. |  |
 ### 10.12 SubDict dictionary operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F4B1`** | `SUBDICTGET` | _`k l D n - D'`_ | Constructs a subdictionary consisting of all keys beginning with prefix `k` (represented by a _Slice_, the first `0 <= l <= n <= 1023` data bits of which are used as a key) of length `l` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the new subdictionary of the same type `HashmapE(n,X)` as a _Slice_ `D'`. |  |
 | **`F4B2`** | `SUBDICTIGET` | _`x l D n - D'`_ | Variant of [`SUBDICTGET`](#instr-subdictget) with the prefix represented by a signed big-endian `l`-bit _Integer_ `x`, where necessarily `l <= 257`. |  |
@@ -855,20 +861,20 @@ These primitives are completely similar to their non-prefix code counterparts ([
 
 ## 11 Application-specific primitives
 ### 11.1 Gas-related primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F800`** | `ACCEPT` | _`-`_ | Sets current gas limit `g_l` to its maximal allowed value `g_m`, and resets the gas credit `g_c` to zero, decreasing the value of `g_r` by `g_c` in the process.<br/>In other words, the current smart contract agrees to buy some gas to finish the current transaction. This action is required to process external messages, which bring no value (hence no gas) with themselves. | `26` |
 | **`F801`** | `SETGASLIMIT` | _`g - `_ | Sets current gas limit `g_l` to the minimum of `g` and `g_m`, and resets the gas credit `g_c` to zero. If the gas consumed so far (including the present instruction) exceeds the resulting value of `g_l`, an (unhandled) out of gas exception is thrown before setting new gas limits. Notice that [`SETGASLIMIT`](#instr-setgaslimit) with an argument `g >= 2^63-1` is equivalent to [`ACCEPT`](#instr-accept). | `26` |
 | **`F80F`** | `COMMIT` | _`-`_ | Commits the current state of registers `c4` (“persistent data'') and `c5` (“actions'') so that the current execution is considered “successful'' with the saved values even if an exception is thrown later. | `26` |
 ### 11.2 Pseudo-random number generator primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F810`** | `RANDU256` | _`- x`_ | Generates a new pseudo-random unsigned 256-bit _Integer_ `x`. The algorithm is as follows: if `r` is the old value of the random seed, considered as a 32-byte array (by constructing the big-endian representation of an unsigned 256-bit integer), then its `sha512(r)` is computed; the first 32 bytes of this hash are stored as the new value `r'` of the random seed, and the remaining 32 bytes are returned as the next random value `x`. | `26+\|c7\|+\|c1_1\|` |
 | **`F811`** | `RAND` | _`y - z`_ | Generates a new pseudo-random integer `z` in the range `0...y-1` (or `y...-1`, if `y<0`). More precisely, an unsigned random value `x` is generated as in `RAND256U`; then `z:=floor(x*y/2^256)` is computed.<br/>Equivalent to [`RANDU256`](#instr-randu256) [`256 MULRSHIFT`](#instr-mulrshift-var). | `26+\|c7\|+\|c1_1\|` |
 | **`F814`** | `SETRAND` | _`x - `_ | Sets the random seed to unsigned 256-bit _Integer_ `x`. | `26+\|c7\|+\|c1_1\|` |
 | **`F815`** | `ADDRAND`<br/>`RANDOMIZE` | _`x - `_ | Mixes unsigned 256-bit _Integer_ `x` into the random seed `r` by setting the random seed to `Sha` of the concatenation of two 32-byte strings: the first with the big-endian representation of the old seed `r`, and the second with the big-endian representation of `x`. | `26` |
 ### 11.3 Configuration primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F82i`** | `[i] GETPARAM` | _` - x`_ | Returns the `i`-th parameter from the _Tuple_ provided at `c7` for `0 <= i <= 15`. Equivalent to [`c7 PUSHCTR`](#instr-pushctr) [`FIRST`](#instr-first) [`[i] INDEX`](#instr-index).<br/>If one of these internal operations fails, throws an appropriate type checking or range checking exception. | `26` |
 | **`F823`** | `NOW` | _` - x`_ | Returns the current Unix time as an _Integer_. If it is impossible to recover the requested value starting from `c7`, throws a type checking or range checking exception as appropriate.<br/>Equivalent to [`3 GETPARAM`](#instr-getparam). | `26` |
@@ -882,14 +888,14 @@ These primitives are completely similar to their non-prefix code counterparts ([
 | **`F832`** | `CONFIGPARAM` | _`i - c -1 or 0`_ | Returns the value of the global configuration parameter with integer index `i` as a _Cell_ `c`, and a flag to indicate success.<br/>Equivalent to [`CONFIGDICT`](#instr-configdict) [`DICTIGETREF`](#instr-dictigetref). |  |
 | **`F833`** | `CONFIGOPTPARAM` | _`i - c^?`_ | Returns the value of the global configuration parameter with integer index `i` as a _Maybe Cell_ `c^?`.<br/>Equivalent to [`CONFIGDICT`](#instr-configdict) [`DICTIGETOPTREF`](#instr-dictigetoptref). |  |
 ### 11.4 Global variable primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F840`** | `GETGLOBVAR` | _`k - x`_ | Returns the `k`-th global variable for `0 <= k < 255`.<br/>Equivalent to [`c7 PUSHCTR`](#instr-pushctr) [`SWAP`](#instr-swap) [`INDEXVARQ`](#instr-indexvarq). | `26` |
 | **`F85_k`** | `[k] GETGLOB` | _` - x`_ | Returns the `k`-th global variable for `1 <= k <= 31`.<br/>Equivalent to [`c7 PUSHCTR`](#instr-pushctr) [`[k] INDEXQ`](#instr-indexq). | `26` |
 | **`F860`** | `SETGLOBVAR` | _`x k - `_ | Assigns `x` to the `k`-th global variable for `0 <= k < 255`.<br/>Equivalent to [`c7 PUSHCTR`](#instr-pushctr) [`ROTREV`](#instr-rotrev) [`SETINDEXVARQ`](#instr-setindexvarq) [`c7 POPCTR`](#instr-popctr). | `26+\|c7’\|` |
 | **`F87_k`** | `[k] SETGLOB` | _`x - `_ | Assigns `x` to the `k`-th global variable for `1 <= k <= 31`.<br/>Equivalent to [`c7 PUSHCTR`](#instr-pushctr) [`SWAP`](#instr-swap) [`k SETINDEXQ`](#instr-setindexq) [`c7 POPCTR`](#instr-popctr). | `26+\|c7’\|` |
 ### 11.5 Hashing and cryptography primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F900`** | `HASHCU` | _`c - x`_ | Computes the representation hash of a _Cell_ `c` and returns it as a 256-bit unsigned integer `x`. Useful for signing and checking signatures of arbitrary entities represented by a tree of cells. | `26` |
 | **`F901`** | `HASHSU` | _`s - x`_ | Computes the hash of a _Slice_ `s` and returns it as a 256-bit unsigned integer `x`. The result is the same as if an ordinary cell containing only data and references from `s` had been created and its hash computed by [`HASHCU`](#instr-hashcu). | `526` |
@@ -897,21 +903,21 @@ These primitives are completely similar to their non-prefix code counterparts ([
 | **`F910`** | `CHKSIGNU` | _`h s k - ?`_ | Checks the Ed25519-signature `s` of a hash `h` (a 256-bit unsigned integer, usually computed as the hash of some data) using public key `k` (also represented by a 256-bit unsigned integer).<br/>The signature `s` must be a _Slice_ containing at least 512 data bits; only the first 512 bits are used. The result is `-1` if the signature is valid, `0` otherwise.<br/>Notice that [`CHKSIGNU`](#instr-chksignu) is equivalent to [`ROT`](#instr-rot) [`NEWC`](#instr-newc) [`256 STU`](#instr-stu) [`ENDC`](#instr-endc) [`ROTREV`](#instr-rotrev) [`CHKSIGNS`](#instr-chksigns), i.e., to [`CHKSIGNS`](#instr-chksigns) with the first argument `d` set to 256-bit _Slice_ containing `h`. Therefore, if `h` is computed as the hash of some data, these data are hashed _twice_, the second hashing occurring inside [`CHKSIGNS`](#instr-chksigns). | `26` |
 | **`F911`** | `CHKSIGNS` | _`d s k - ?`_ | Checks whether `s` is a valid Ed25519-signature of the data portion of _Slice_ `d` using public key `k`, similarly to [`CHKSIGNU`](#instr-chksignu). If the bit length of _Slice_ `d` is not divisible by eight, throws a cell underflow exception. The verification of Ed25519 signatures is the standard one, with `Sha` used to reduce `d` to the 256-bit number that is actually signed. | `26` |
 ### 11.6 Miscellaneous primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F940`** | `CDATASIZEQ` | _`c n - x y z -1 or 0`_ | Recursively computes the count of distinct cells `x`, data bits `y`, and cell references `z` in the dag rooted at _Cell_ `c`, effectively returning the total storage used by this dag taking into account the identification of equal cells. The values of `x`, `y`, and `z` are computed by a depth-first traversal of this dag, with a hash table of visited cell hashes used to prevent visits of already-visited cells. The total count of visited cells `x` cannot exceed non-negative _Integer_ `n`; otherwise the computation is aborted before visiting the `(n+1)`-st cell and a zero is returned to indicate failure. If `c` is _Null_, returns `x=y=z=0`. |  |
 | **`F941`** | `CDATASIZE` | _`c n - x y z`_ | A non-quiet version of [`CDATASIZEQ`](#instr-cdatasizeq) that throws a cell overflow exception (8) on failure. |  |
 | **`F942`** | `SDATASIZEQ` | _`s n - x y z -1 or 0`_ | Similar to [`CDATASIZEQ`](#instr-cdatasizeq), but accepting a _Slice_ `s` instead of a _Cell_. The returned value of `x` does not take into account the cell that contains the slice `s` itself; however, the data bits and the cell references of `s` are accounted for in `y` and `z`. |  |
 | **`F943`** | `SDATASIZE` | _`s n - x y z`_ | A non-quiet version of [`SDATASIZEQ`](#instr-sdatasizeq) that throws a cell overflow exception (8) on failure. |  |
 ### 11.7 Currency manipulation primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`FA00`** | `LDGRAMS`<br/>`LDVARUINT16` | _`s - x s'`_ | Loads (deserializes) a `Gram` or `VarUInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.<br/>The net effect is approximately equivalent to [`4 LDU`](#instr-ldu) [`SWAP`](#instr-swap) [`3 LSHIFT#`](#instr-lshift) [`LDUX`](#instr-ldux). | `26` |
 | **`FA01`** | `LDVARINT16` | _`s - x s'`_ | Similar to [`LDVARUINT16`](#instr-ldgrams), but loads a _signed_ _Integer_ `x`.<br/>Approximately equivalent to [`4 LDU`](#instr-ldu) [`SWAP`](#instr-swap) [`3 LSHIFT#`](#instr-lshift) [`LDIX`](#instr-ldix). | `26` |
 | **`FA02`** | `STGRAMS`<br/>`STVARUINT16` | _`b x - b'`_ | Stores (serializes) an _Integer_ `x` in the range `0...2^120-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown. | `26` |
 | **`FA03`** | `STVARINT16` | _`b x - b'`_ | Similar to [`STVARUINT16`](#instr-stgrams), but serializes a _signed_ _Integer_ `x` in the range `-2^119...2^119-1`. | `26` |
 ### 11.8 Message and address manipulation primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`FA40`** | `LDMSGADDR` | _`s - s' s''`_ | Loads from _Slice_ `s` the only prefix that is a valid `MsgAddress`, and returns both this prefix `s'` and the remainder `s''` of `s` as slices. | `26` |
 | **`FA41`** | `LDMSGADDRQ` | _`s - s' s'' -1 or s 0`_ | A quiet version of [`LDMSGADDR`](#instr-ldmsgaddr): on success, pushes an extra `-1`; on failure, pushes the original `s` and a zero. | `26` |
@@ -922,7 +928,7 @@ These primitives are completely similar to their non-prefix code counterparts ([
 | **`FA46`** | `REWRITEVARADDR` | _`s - x s'`_ | A variant of [`REWRITESTDADDR`](#instr-rewritestdaddr) that returns the (rewritten) address as a _Slice_ `s`, even if it is not exactly 256 bit long (represented by a `msg_addr_var`). | `26` |
 | **`FA47`** | `REWRITEVARADDRQ` | _`s - x s' -1 or 0`_ | A quiet version of primitive [`REWRITEVARADDR`](#instr-rewritevaraddr). | `26` |
 ### 11.9 Outbound message and output action primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`FB00`** | `SENDRAWMSG` | _`c x - `_ | Sends a raw message contained in _Cell `c`_, which should contain a correctly serialized object `Message X`, with the only exception that the source address is allowed to have dummy value `addr_none` (to be automatically replaced with the current smart-contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction). Integer parameter `x` contains the flags. Currently `x=0` is used for ordinary messages; `x=128` is used for messages that are to carry all the remaining balance of the current smart contract (instead of the value originally indicated in the message); `x=64` is used for messages that carry all the remaining value of the inbound message in addition to the value initially indicated in the new message (if bit 0 is not set, the gas fees are deducted from this amount); `x'=x+1` means that the sender wants to pay transfer fees separately; `x'=x+2` means that any errors arising while processing this message during the action phase should be ignored. Finally, `x'=x+32` means that the current account must be destroyed if its resulting balance is zero. This flag is usually employed together with `+128`. | `526` |
 | **`FB02`** | `RAWRESERVE` | _`x y - `_ | Creates an output action which would reserve exactly `x` nanograms (if `y=0`), at most `x` nanograms (if `y=2`), or all but `x` nanograms (if `y=1` or `y=3`), from the remaining balance of the account. It is roughly equivalent to creating an outbound message carrying `x` nanograms (or `b-x` nanograms, where `b` is the remaining balance) to oneself, so that the subsequent output actions would not be able to spend more money than the remainder. Bit `+2` in `y` means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved. Bit `+8` in `y` means `x:=-x` before performing any further actions. Bit `+4` in `y` means that `x` is increased by the original balance of the current account (before the compute phase), including all extra currencies, before performing any other checks and actions. Currently `x` must be a non-negative integer, and `y` must be in the range `0...15`. | `526` |
@@ -939,7 +945,7 @@ However, when invoked in a TVM instance with debug mode enabled, these primitive
 [`DEBUG`](#instr-debug) and [`DEBUGSTR`](#instr-debugstr) are the two debug primitives, they cover all opcodes that start with `FE`.
 Other primitives listed here have opcodes from the same set. When debug is enabled, they have their specified effects. When debug is disabled, they behave as [`NOP`](#instr-nop).
 
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`FEnn`** | `{nn} DEBUG` | _`-`_ | `0 <= nn < 240` | `26` |
 | **`FEFnssss`** | `{string} DEBUGSTR`<br/>`{string} {x} DEBUGSTRI` | _`-`_ | `0 <= n < 16`. Length of `ssss` is `n+1` bytes.<br/>`{string}` is a [string literal](https://github.com/Piterden/TON-docs/blob/master/Fift.%20A%20Brief%20Introduction.md#user-content-29-string-literals).<br/>[`DEBUGSTR`](#instr-debugstr): `ssss` is the given string.<br/>[`DEBUGSTRI`](#instr-debugstr): `ssss` is one-byte integer `0 <= x <= 255` followed by the given string. | `26` |
@@ -947,10 +953,11 @@ Other primitives listed here have opcodes from the same set. When debug is enabl
 | **`FE2i`** | `s[i] DUMP` | _`-`_ | Dumps `s[i]`. | `26` |
 
 ## 13 Codepage primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`FFnn`** | `[nn] SETCP` | _`-`_ | Selects TVM codepage `0 <= nn < 240`. If the codepage is not supported, throws an invalid opcode exception. | `26` |
 | **`FF00`** | `SETCP0` | _`-`_ | Selects TVM (test) codepage zero as described in this document. | `26` |
 | **`FFFz`** | `[z-16] SETCP` | _`-`_ | Selects TVM codepage `z-16` for `1 <= z <= 15`. Negative codepages `-13...-1` are reserved for restricted versions of TVM needed to validate runs of TVM in other codepages. Negative codepage `-14` is reserved for experimental codepages, not necessarily compatible between different TVM implementations, and should be disabled in the production versions of TVM. | `26` |
 | **`FFF0`** | `SETCPX` | _`c - `_ | Selects codepage `c` with `-2^15 <= c < 2^15` passed in the top of the stack. | `26` |
 
+</div></font>
